@@ -2,21 +2,20 @@
 
 angular.module 'bpmsclientApp'
 .controller 'MainCtrl', ($scope, $http, socket) ->
-  $scope.awesomeThings = []
+  $scope.newDispute = ''
+  $scope.disputes = []
 
-  $http.get('/api/things').success (awesomeThings) ->
-    $scope.awesomeThings = awesomeThings
-    socket.syncUpdates 'thing', $scope.awesomeThings
+  $http.get('/api/disputes').success (disputes) ->
+    $scope.disputes = disputes
+    socket.syncUpdates 'dispute', $scope.disputes
 
-  $scope.addThing = ->
-    return if $scope.newThing is ''
-    $http.post '/api/things',
-      name: $scope.newThing
+  $scope.deleteDispute = (dispute) ->
+    $http.delete '/api/disputes/' + dispute._id
 
-    $scope.newThing = ''
-
-  $scope.deleteThing = (thing) ->
-    $http.delete '/api/things/' + thing._id
+  $scope.addDispute = ->
+    console.log $scope.newDispute
+    return if $scope.newDispute is ''
+    $http.post '/api/disputes', $scope.newDispute
 
   $scope.$on '$destroy', ->
-    socket.unsyncUpdates 'thing'
+    socket.unsyncUpdates 'dispute'

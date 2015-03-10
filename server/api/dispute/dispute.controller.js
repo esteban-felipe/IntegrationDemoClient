@@ -3,6 +3,7 @@
 var _ = require('lodash');
 var Dispute = require('./dispute.model');
 
+
 // Get list of disputes
 exports.index = function(req, res) {
   Dispute.find(function (err, disputes) {
@@ -22,27 +23,53 @@ exports.show = function(req, res) {
 
 // Creates a new dispute in the DB.
 exports.create = function(req, res) {
-  var soap = require('soap');
-  var url= 'http://bpms.local:8080/intalio/ode/processes/IntegrationDemo_Processes_Core_DisputeManagement_Dispute_Management_Customer?wsdl'
   var body = req.body
-  soap.createClient(url,function(err,client){
-    client.Recieve_dispute_request(req.body,function(err,results){
-      if (err) throw err;
-      req.body.Ref = results.Ref
-      Dispute.create(req.body, function(err, dispute) {
-        if(err) { return handleError(res, err); }
-        return res.json(201, dispute);
-      });
-    })
-  });
+  var content = '<?xml version="1.0" encoding="UTF-8"?><this:Recieve_dispute_requestRequest xmlns:this="http://integrationdemo.com/Processes/Core/DisputeManagement/Dispute_Management"><tns:Client xmlns:tns="http://www.example.org/DataSchema">' + body.Client + '</tns:Client><tns:Account xmlns:tns="http://www.example.org/DataSchema">'+ body.Account + '</tns:Account><tns:Amount xmlns:tns="http://www.example.org/DataSchema">' + body.Amount + '</tns:Amount><tns:Description xmlns:tns="http://www.example.org/DataSchema">' + body.Description + '</tns:Description></this:Recieve_dispute_requestRequest>'
+  var http = require('http');
+
+  var postRequest = {
+    host: "bpms.local",
+    path: "/intalio/ode/processes/IntegrationDemo_Processes_Core_DisputeManagement_Dispute_Management_Customer",
+    port: 8080,
+    method: "POST",
+    headers: {
+        'Cookie': "cookie",
+        'Content-Type': 'application/xml',
+        'Content-Length': Buffer.byteLength(content)
+    }
+  };
+
+  var soapreq = http.request(postRequest,function(response){
+    console.log( response.statusCode );
+    var buffer = "";
+    response.on( "data", function( data ) { buffer = buffer + data; } );
+    response.on( "end", function( data ) { 
+      console.log( buffer ); 
+      var parseString = require('xml2js').parseString;
+      parseString(buffer,function(err,result){
+        // console.log(result.Recieve_dispute_requestResponse['tns:Ref'][0]._)
+        body.Ref = result.Recieve_dispute_requestResponse['tns:Ref'][0]._
+        Dispute.create(body, function(err, dispute) {
+          // console.log(client.lastRequest)
+          if(err) { return handleError(res, err); }
+          return res.json(201, dispute);
+        });
+
+      })
+    });    
+  })
+  soapreq.write( content );
+  soapreq.end();
 };
 
 // Updates an existing dispute in the DB.
 exports.update = function(req, res) {
   if(req.body._id) { delete req.body._id; }
-  Dispute.findById(req.params.id, function (err, dispute) {
+  // Dispute.findById(req.params.id, function (err, dispute) {
+  Dispute.find({'Ref':req.params.id}, function (err, disputes) {
     if (err) { return handleError(res, err); }
-    if(!dispute) { return res.send(404); }
+    if(disputes.length == 0) { return res.send(404); }
+    var dispute = disputes[0]
     var updated = _.merge(dispute, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }

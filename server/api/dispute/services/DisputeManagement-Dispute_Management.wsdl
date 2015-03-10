@@ -1,0 +1,94 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<wsdl:definitions xmlns:update_dispute="http://integrationdemo.com/Services/REST/update_dispute.rest" xmlns:Customer="http://integrationdemo.com/Processes/Core/DisputeManagement/Customer" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:Analyst="http://integrationdemo.com/Processes/Core/DisputeManagement/Analyst" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:frmReview="http://www.intalio.com/gi/Forms/frmReview.gi" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:diag="http://integrationdemo.com/Processes/Core/DisputeManagement" xmlns:tns="http://www.example.org/DataSchema" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:attachments="http://www.intalio.com/gi/Forms/frmReview.gi/attachments" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:this="http://integrationdemo.com/Processes/Core/DisputeManagement/Dispute_Management" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" targetNamespace="http://integrationdemo.com/Processes/Core/DisputeManagement/Dispute_Management">
+    <wsdl:types>
+        <xs:schema elementFormDefault="qualified" targetNamespace="http://integrationdemo.com/Processes/Core/DisputeManagement/Dispute_Management">
+            <xs:import namespace="http://www.example.org/DataSchema" schemaLocation="../../Schemas/DataSchema.xsd"/>
+            <xs:element name="Recieve_dispute_requestRequest" type="tns:DisputeRequestType"/>
+            <xs:element name="Recieve_dispute_requestResponse" type="tns:DisputeResponseType"/>
+            <xs:element name="Recieve_responseRequest" type="tns:DisputeUpdateType"/>
+            <xs:element name="Recieve_responseResponse" type="tns:DisputeResponseType"/>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:import namespace="http://www.intalio.com/gi/Forms/frmReview.gi" location="../../Forms/frmReview.gi.wsdl"/>
+    <wsdl:message name="Recieve_dispute_requestRequest">
+        <wsdl:part name="body" element="this:Recieve_dispute_requestRequest"/>
+    </wsdl:message>
+    <wsdl:message name="Recieve_dispute_requestResponse">
+        <wsdl:part name="body" element="this:Recieve_dispute_requestResponse"/>
+    </wsdl:message>
+    <wsdl:message name="Recieve_responseRequest">
+        <wsdl:part name="body" element="this:Recieve_responseRequest"/>
+    </wsdl:message>
+    <wsdl:message name="Recieve_responseResponse">
+        <wsdl:part name="body" element="this:Recieve_responseResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="ForCustomer">
+        <wsdl:operation name="Recieve_dispute_request">
+            <wsdl:input message="this:Recieve_dispute_requestRequest" name="Recieve_dispute_request"/>
+            <wsdl:output message="this:Recieve_dispute_requestResponse" name="Recieve_dispute_requestResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="Recieve_response">
+            <wsdl:input message="this:Recieve_responseRequest" name="Recieve_response"/>
+            <wsdl:output message="this:Recieve_responseResponse" name="Recieve_responseResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="CanonicBindingForCustomer" type="this:ForCustomer">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="Recieve_dispute_request">
+            <soap:operation style="document" soapAction="http://integrationdemo.com/Processes/Core/DisputeManagement/Dispute_Management/ForCustomer/Recieve_dispute_request"/>
+            <wsdl:input name="Recieve_dispute_request">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="Recieve_dispute_requestResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="Recieve_response">
+            <soap:operation style="document" soapAction="http://integrationdemo.com/Processes/Core/DisputeManagement/Dispute_Management/ForCustomer/Recieve_response"/>
+            <wsdl:input name="Recieve_response">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="Recieve_responseResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="WFmagic_9MG5YMa-EeSJlY-0H6wtLAServiceBinding" type="frmReview:Process">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="initProcess">
+            <soap:operation style="document" soapAction="http://www.intalio.com/gi/Forms/frmReview.gi/Process/initProcess"/>
+            <wsdl:input name="initProcessRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="initProcessResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="notifyTaskCompletion">
+            <soap:operation style="document" soapAction="http://www.intalio.com/gi/Forms/frmReview.gi/Process/notifyTaskCompletion"/>
+            <wsdl:input name="notifyTaskCompletionRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="notifyTaskCompletionResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="CanonicServiceForCustomer">
+        <wsdl:port name="canonicPort" binding="this:CanonicBindingForCustomer">
+            <soap:address location="http://bpms.local:8080/intalio/ode/processes/IntegrationDemo/Processes/Core/DisputeManagement/Dispute_Management/Customer"/>
+        </wsdl:port>
+    </wsdl:service>
+    <wsdl:service name="WFmagic_9MG5YMa-EeSJlY-0H6wtLAService">
+        <wsdl:port name="Dispute_Management_for_AnalystForThePortTypeProcessPort" binding="this:WFmagic_9MG5YMa-EeSJlY-0H6wtLAServiceBinding">
+            <soap:address location="http://bpms.local:8080/intalio/ode/processes/IntegrationDemo/Processes/Core/DisputeManagement/Dispute_Management/Analyst/WFmagic_9MG5YMa-EeSJlY-0H6wtLA"/>
+        </wsdl:port>
+    </wsdl:service>
+    <vprop:property name="prop" type="xs:string"/>
+    <vprop:propertyAlias propertyName="this:prop" messageType="this:Recieve_responseRequest" part="body">
+        <vprop:query>tns:Ref/text()</vprop:query>
+    </vprop:propertyAlias>
+    <vprop:propertyAlias propertyName="this:prop" messageType="this:Recieve_dispute_requestResponse" part="body">
+        <vprop:query>tns:Ref/text()</vprop:query>
+    </vprop:propertyAlias>
+</wsdl:definitions>

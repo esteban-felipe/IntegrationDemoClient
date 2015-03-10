@@ -8,7 +8,10 @@ var DisputeSchema = new Schema({
   Client: String,
   Account: String,
   Amount: Number,
-  Description: String
+  Description: String,
+  Question: String,
+  Answer: String,
+  Status:String
 });
 
 module.exports = mongoose.model('Dispute', DisputeSchema);

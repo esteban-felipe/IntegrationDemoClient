@@ -1,31 +1,41 @@
-header#banner.hero-unit
+header#banner.under-header
   .container
-    h1 'Allo, 'Allo!
-    p.lead Kick-start your next web app with Angular Fullstack
-    img(src='assets/images/yeoman.png', alt='I\'m Yeoman')
+    img(src='assets/images/Bpms_BPMS.png', alt='I\'m Yeoman')
 
 .container
   .row
-    .col-lg-12
-      h1.page-header Features:
-      ul.nav.nav-tabs.nav-stacked.col-md-4.col-lg-4.col-sm-6(ng-repeat='thing in awesomeThings')
-        li
-          a(href='#', tooltip='{{thing.info}}')
-            | {{thing.name}}
-            button.close(type='button', ng-click='deleteThing(thing)') ×
-
-  form.thing-form
-    label Syncs in realtime across clients
-    p.input-group
-      input.form-control(type='text', placeholder='Add a new thing here.', ng-model='newThing')
-      span.input-group-btn
-        button.btn.btn-primary(type='submit', ng-click='addThing()') Add New
-
+    .col-lg-5
+      h1.page-header Create a dispute
+      form
+        .form-group
+          p
+            input.form-control(ng-model='newDispute.Client', name='Client',type='text', placeholder='Client')
+          p
+            input.form-control(ng-model='newDispute.Account',name='Account',type='text', placeholder='Account')
+          p
+            input.form-control(ng-model='newDispute.Amount',name='Amount',type='text', placeholder='Amount')
+          p
+            textarea.form-control(ng-model='newDispute.Description',name='Description',rows='3', placeholder='Description')
+          p.right-justify
+            button.btn.btn-primary(type='submit', ng-click='addDispute()') Add new
+    .col-lg-7
+      h1.page-header Disputes
+      .dispute-box.bg-success(ng-repeat='dispute in disputes')
+        button.close(type='button', ng-click='deleteDispute(dispute)') x
+        p
+          dl.dl-horizontal
+            dt Reference
+            dd {{dispute.Ref}}
+            dt Client
+            dd {{dispute.Client}}
+            dt Account
+            dd {{dispute.Account}}
+            dt Amount
+            dd {{dispute.Amount}}
+            dt Description
+            dd {{dispute.Description}}
+            dt Status
+            dd 
+              strong
+                {{dispute.Status}}
 footer.footer
-  .container
-    p
-      | Angular Fullstack v2.0.13
-      = ' | '
-      a(href='https://twitter.com/tyhenkel') @tyhenkel
-      = ' | '
-      a(href='https://github.com/DaftMonk/generator-angular-fullstack/issues?state=open') Issues

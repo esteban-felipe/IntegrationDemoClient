@@ -8,7 +8,7 @@
 }
 
 #banner h1 {
-    font-size: 60px;
+    font-size: 40px;
     line-height: 1;
     letter-spacing: -1px;
 }
@@ -21,10 +21,30 @@
     text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
     background: #4393B9;
 }
+.under-header {
+    position: relative;
+    padding: 30px 15px;
+    color: #050505;
+    text-align: center;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+}
 
 .footer {
     text-align: center;
     padding: 30px 0;
     margin-top: 70px;
     border-top: 1px solid #E5E5E5;
+}
+.right-justify {
+    text-align: right;
+}
+.dispute-box {
+    border-width: 1px;
+    border-color: #ddd;
+    display: block;
+    border-style: solid;
+    border-radius: 4px;
+    margin: 10px;
+    padding: 10px;
 }
