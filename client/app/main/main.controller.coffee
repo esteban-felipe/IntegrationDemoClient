@@ -17,5 +17,8 @@ angular.module 'bpmsclientApp'
     return if $scope.newDispute is ''
     $http.post '/api/disputes', $scope.newDispute
 
+  $scope.updateDispute = (dispute) ->
+    $http.put '/api/disputes/' + dispute.Ref , dispute
+
   $scope.$on '$destroy', ->
     socket.unsyncUpdates 'dispute'

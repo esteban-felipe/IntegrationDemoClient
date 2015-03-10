@@ -20,7 +20,7 @@ header#banner.under-header
             button.btn.btn-primary(type='submit', ng-click='addDispute()') Add new
     .col-lg-7
       h1.page-header Disputes
-      .dispute-box.bg-success(ng-repeat='dispute in disputes')
+      .dispute-box(ng-repeat='dispute in disputes',ng-class="{'bg-success': dispute.Status == 'Approved','bg-warning': dispute.Status == 'Challenged','bg-danger': dispute.Status == 'Rejected','bg-primary': dispute.Status == 'Pending'}")
         button.close(type='button', ng-click='deleteDispute(dispute)') x
         p
           dl.dl-horizontal
@@ -38,4 +38,15 @@ header#banner.under-header
             dd 
               strong
                 {{dispute.Status}}
+            dt(ng-if="dispute.Status == 'Challenged' && !dispute.Answer") Question
+            dd(ng-if="dispute.Status == 'Challenged' && !dispute.Answer")
+              em
+                {{dispute.Question}}
+            dt(ng-if="dispute.Status == 'Challenged' && !dispute.Answer") Answer
+            dd(ng-if="dispute.Status == 'Challenged' && !dispute.Answer")
+              textarea.form-control(ng-model='dispute.newAnswer',rows='3')
+              p
+              p.text-right
+                button.btn.btn-primary(ng-click='updateDispute(dispute)') Reply
+
 footer.footer
