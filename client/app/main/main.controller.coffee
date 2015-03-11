@@ -13,9 +13,9 @@ angular.module 'bpmsclientApp'
     $http.delete '/api/disputes/' + dispute._id
 
   $scope.addDispute = ->
-    console.log $scope.newDispute
     return if $scope.newDispute is ''
     $http.post '/api/disputes', $scope.newDispute
+    $scope.newDispute = {}
 
   $scope.updateDispute = (dispute) ->
     $http.put '/api/disputes/' + dispute.Ref , dispute
